@@ -8,7 +8,7 @@ search( :users, "shell:*zsh" ).each do |u|
   user_id = u["id"]
 
   theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
-  home = Dir.home(user_id)
+  home = data_bag_item( "users", user_id )["home"] || user_id == 'root' ? '/root' : "/home/#{user_id}"
 
   link "#{home}/.oh-my-zsh" do
     to "/usr/src/oh-my-zsh"
