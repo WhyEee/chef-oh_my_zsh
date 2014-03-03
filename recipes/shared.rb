@@ -9,12 +9,12 @@ search( :users, "shell:*zsh" ).each do |u|
 
   theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
 
-  link "/home/#{user_id}/.oh-my-zsh" do
+  link "~#{user_id}/.oh-my-zsh" do
     to "/usr/src/oh-my-zsh"
-    not_if "test -d /home/#{user_id}/.oh-my-zsh"
+    not_if "test -d ~#{user_id}/.oh-my-zsh"
   end
 
-  template "/home/#{user_id}/.zshrc" do
+  template "~#{user_id}/.zshrc" do
     source "zshrc.erb"
     owner user_id
     group user_id
