@@ -4,6 +4,10 @@ git "/usr/src/oh-my-zsh" do
   action :sync
 end
 
+ohai 'reload-for-users' do
+  action :reload
+end
+
 node['etc']['passwd'].each do |user, data|
   if data['shell'].include? 'zsh'
     user_id = data['uid']
