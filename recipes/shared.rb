@@ -4,22 +4,22 @@ git "/usr/src/oh-my-zsh" do
   action :sync
 end
 
-search( :users, "shell:*zsh" ).each do |u|
-  user_id = u["id"]
-
-  theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
-  home = data_bag_item( "users", user_id )["home"] || user_id == 'root' ? '/root' : "/home/#{user_id}"
-
-  link "#{home}/.oh-my-zsh" do
-    to "/usr/src/oh-my-zsh"
-    not_if "test -d #{home}/.oh-my-zsh"
-  end
-
-  template "#{home}/.zshrc" do
-    source "zshrc.erb"
-    owner user_id
-    group user_id
-    variables( :theme => ( theme || node[:ohmyzsh][:theme] ))
-    action :create_if_missing
+node['etc']['passwd'].each do |user, data|
+  if data['shell'].include? 'zsh'
+    user_id = data['uid']
+    home = data['dir']
+  
+    link "#{home}/.oh-my-zsh" do
+      to "/usr/src/oh-my-zsh"
+      not_if "test -d #{home}/.oh-my-zsh"
+    end
+  
+    template "#{home}/.zshrc" do
+      source "zshrc.erb"
+      owner user_id
+      group user_id
+      variables theme: node[:ohmyzsh][:theme]
+      action :create_if_missing
+    end
   end
 end
