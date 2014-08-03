@@ -18,7 +18,6 @@ Etc.passwd do |user|
       source "zshrc.erb"
       owner user_id
       group user_id
-      variables { :theme => ( node[:ohmyzsh][:theme] )}
       action :create_if_missing
     end
   end
