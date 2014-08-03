@@ -4,14 +4,10 @@ git "/usr/src/oh-my-zsh" do
   action :sync
 end
 
-ohai 'reload-for-users' do
-  action :reload
-end
-
-node['etc']['passwd'].each do |user, data|
-  if data['shell'].include? 'zsh'
-    user_id = data['uid']
-    home = data['dir']
+Etc.passwd do |user|
+  if user.shell.include? 'zsh'
+    user_id = user.uid
+    home = user.dir
   
     link "#{home}/.oh-my-zsh" do
       to "/usr/src/oh-my-zsh"
