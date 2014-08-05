@@ -16,6 +16,7 @@ Etc.passwd do |user|
   
     template "#{home}/.zshrc" do
       source "zshrc.erb"
+      variables :theme => 'robbyrussell'
       owner user_id
       group user_id
       action :create_if_missing
