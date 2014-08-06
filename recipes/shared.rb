@@ -16,12 +16,12 @@ Etc.passwd do |user|
   
     template "#{home}/.zshrc" do
       source "zshrc.erb"
-      variables theme: 'robbyrussell',
-                case_sensitive: false,
-                auto_update: false,
-                ls_colors: true,
-                auto_title: true,
-                plugins: 'git rbenv'
+      variables theme: node.oh_my_zsh.theme,
+                case_sensitive: node.oh_my_zsh.case_sensitive,
+                auto_update: node.oh_my_zsh.auto_update,
+                ls_colors: node.oh_my_zsh.ls_colors,
+                auto_title: node.oh_my_zsh.auto_title,
+                plugins: node.oh_my_zsh.plugins
       owner user_id
       group user_id
       action :create_if_missing
