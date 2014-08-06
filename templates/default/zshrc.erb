@@ -11,6 +11,9 @@ export ZSH_THEME="<%= @theme %>"
 # Comment this out to disable weekly auto-update checks
 <%= @auto_update ? '#' : '' %> export DISABLE_AUTO_UPDATE="true"
 
+# Comment this out to disable the update prompt
+<%= @update_prompt ? '#' : '' %> export DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment following line if you want to disable colors in ls
 <%= @ls_colors ? '#' : '' %> export DISABLE_LS_COLORS="true"
 
