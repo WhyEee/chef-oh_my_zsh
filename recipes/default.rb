@@ -20,25 +20,32 @@
 include_recipe "git"
 include_recipe "zsh"
 
-search( :users, "shell:*zsh AND NOT action:remove" ).each do |u|
-  user_id = u["id"]
-
-  git "/home/#{user_id}/.oh-my-zsh" do
-    repository "https://github.com/robbyrussell/oh-my-zsh.git"
-    reference "master"
-    user user_id
-    group user_id
-    action :checkout
-    not_if "test -d /home/#{user_id}/.oh-my-zsh"
-  end
-
-  theme = data_bag_item( "users", user_id )["oh-my-zsh-theme"]
-
-  template "/home/#{user_id}/.zshrc" do
-    source "zshrc.erb"
-    owner user_id
-    group user_id
-    variables( :theme => ( theme || node[:ohmyzsh][:theme] ))
-    action :create_if_missing
+Etc.passwd do |user|
+  if user.shell.include? 'zsh'
+    user_name = user.name
+    home = user.dir
+  
+    git "/#{home}/.oh-my-zsh" do
+      repository "https://github.com/robbyrussell/oh-my-zsh.git"
+      reference "master"
+      user user_name
+      group user_name
+      action :checkout
+      not_if "test -d #{home}/.oh-my-zsh"
+    end
+  
+    template "/#{home}/.zshrc" do
+      source "zshrc.erb"
+      owner user_name
+      group user_name
+      variables theme: node.oh_my_zsh.theme,
+                case_sensitive: node.oh_my_zsh.case_sensitive,
+                auto_update: node.oh_my_zsh.auto_update,
+                update_prompt: node.oh_my_zsh.update_prompt,
+                ls_colors: node.oh_my_zsh.ls_colors,
+                auto_title: node.oh_my_zsh.auto_title,
+                plugins: node.oh_my_zsh.plugins
+      action :create_if_missing
+    end
   end
 end
