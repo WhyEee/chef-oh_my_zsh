@@ -40,7 +40,7 @@ Etc.passwd do |user|
       source "zshrc.erb"
       variables theme: node.oh_my_zsh.theme,
                 case_sensitive: node.oh_my_zsh.case_sensitive,
-                auto_update: node.oh_my_zsh.auto_update,
+                auto_update: node.oh_my_zsh.auto_update && user_name == 'root',
                 update_prompt: node.oh_my_zsh.update_prompt,
                 ls_colors: node.oh_my_zsh.ls_colors,
                 auto_title: node.oh_my_zsh.auto_title,
